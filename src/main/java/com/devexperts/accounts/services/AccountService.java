@@ -1,36 +1,21 @@
 package com.devexperts.accounts.services;
 
 import com.devexperts.accounts.entities.Account;
-import com.devexperts.accounts.repositories.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.devexperts.accounts.entities.patch.AccountPatch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
-public class AccountService {
+public interface AccountService {
 
-    private final AccountRepository accountRepository;
+    Page<Account> findAllAccounts(Pageable pageable);
 
-    @Autowired
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
+    Account addAccount(Account account);
 
-    @Transactional
-    public Account addAccount(Account account) {
-        return accountRepository.save(account);
-    }
+    Optional<Account> findAccountById(long id);
 
-    @Transactional(readOnly = true)
-    public Optional<Account> findAccountById(long id) {
-        return accountRepository.findById(id);
-    }
+    void updateAccount(long id, AccountPatch accountPatch);
 
-    public Page<Account> findAllAccounts(Pageable pageable) {
-        return accountRepository.findAll(pageable);
-    }
+    void deleteAccount(long id);
 }

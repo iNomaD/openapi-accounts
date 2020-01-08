@@ -48,28 +48,6 @@ test {
     useJUnitPlatform()
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir "${buildDir.absolutePath}/generated/open-api/src/main/java"
-        }
-    }
-}
-
-idea.project.settings {
-    taskTriggers {
-        beforeBuild tasks.getByName("openApiGenerate")
-        beforeRebuild tasks.getByName("openApiGenerate")
-        afterSync tasks.getByName("openApiGenerate")
-        beforeSync tasks.getByName("openApiGenerate")
-    }
-}
-
-compileJava {
-    dependsOn  tasks.openApiGenerate
-    source "${buildDir}/generated/open-api/src/main/java"
-}
-
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "${projectDir}/src/main/resources/api/accounts-spec.yaml"
@@ -81,4 +59,30 @@ openApiGenerate {
     configOptions = [
             delegatePattern: "true"
     ]
+}
+
+idea.project.settings {
+    taskTriggers {
+        beforeBuild tasks.getByName("openApiGenerate")
+        beforeRebuild tasks.getByName("openApiGenerate")
+        afterSync tasks.getByName("openApiGenerate")
+        beforeSync tasks.getByName("openApiGenerate")
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir.absolutePath}/generated/open-api/src/main/java"
+        }
+    }
+}
+
+compileJava {
+    dependsOn  tasks.openApiGenerate
+    source "${buildDir}/generated/open-api/src/main/java"
+}
+
+springBoot {
+    mainClassName = "com.devexperts.accounts.AccountsApp"
 }

@@ -5,28 +5,13 @@ import com.devexperts.accounts.entities.patch.AccountPatch;
 import com.devexperts.accounts.model.AccountJson;
 import com.devexperts.accounts.model.CreateAccountJson;
 import com.devexperts.accounts.model.UpdateAccountJson;
-import org.springframework.stereotype.Component;
 
-@Component
-public class AccountMapper {
+public interface AccountMapper {
 
-    public AccountJson toDto(Account entity) {
-        return new AccountJson()
-            .id(entity.getId())
-            .name(entity.getName())
-            .email(entity.getEmail())
-            .balance(entity.getBalance());
-    }
+    AccountJson toDto(Account entity);
 
-    public Account toEntity(CreateAccountJson dto) {
-        return Account.builder()
-            .name(dto.getName())
-            .email(dto.getEmail())
-            .balance(dto.getBalance())
-            .build();
-    }
+    Account toEntity(CreateAccountJson dto);
 
-    public AccountPatch toPatch(UpdateAccountJson jsonPatch) {
-        return null;
-    }
+    AccountPatch toPatch(UpdateAccountJson jsonPatch);
+
 }

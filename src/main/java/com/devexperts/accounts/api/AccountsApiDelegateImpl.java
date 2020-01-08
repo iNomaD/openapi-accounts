@@ -5,7 +5,7 @@ import com.devexperts.accounts.mappers.AccountMapper;
 import com.devexperts.accounts.model.AccountJson;
 import com.devexperts.accounts.model.CreateAccountJson;
 import com.devexperts.accounts.model.UpdateAccountJson;
-import com.devexperts.accounts.services.AccountService;
+import com.devexperts.accounts.services.impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -19,33 +19,13 @@ import java.util.stream.Collectors;
 @Component
 public class AccountsApiDelegateImpl implements AccountsApiDelegate {
 
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
     private final AccountMapper accountMapper;
 
     @Autowired
-    public AccountsApiDelegateImpl(AccountService accountService, AccountMapper accountMapper) {
+    public AccountsApiDelegateImpl(AccountServiceImpl accountService, AccountMapper accountMapper) {
         this.accountService = accountService;
         this.accountMapper = accountMapper;
-    }
-
-    @Override
-    public ResponseEntity<AccountJson> addAccount(CreateAccountJson createAccountJson) {
-        Account account = accountService.addAccount(accountMapper.toEntity(createAccountJson));
-        return new ResponseEntity<>(accountMapper.toDto(account), HttpStatus.CREATED);
-    }
-
-    @Override
-    public ResponseEntity<Void> deleteAccount(Long accountId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<AccountJson> findAccountById(Long accountId) {
-        Optional<Account> account = accountService.findAccountById(accountId);
-        if (account.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(accountMapper.toDto(account.get()), HttpStatus.OK);
     }
 
     @Override
@@ -59,7 +39,29 @@ public class AccountsApiDelegateImpl implements AccountsApiDelegate {
     }
 
     @Override
+    public ResponseEntity<AccountJson> addAccount(CreateAccountJson createAccountJson) {
+        Account account = accountService.addAccount(accountMapper.toEntity(createAccountJson));
+        return new ResponseEntity<>(accountMapper.toDto(account), HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<AccountJson> findAccountById(Long accountId) {
+        Optional<Account> account = accountService.findAccountById(accountId);
+        if (account.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(accountMapper.toDto(account.get()), HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<Void> updateAccount(Long accountId, UpdateAccountJson updateAccountJson) {
-        return null;
+        accountService.updateAccount(accountId, accountMapper.toPatch(updateAccountJson));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteAccount(Long accountId) {
+        accountService.deleteAccount(accountId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
