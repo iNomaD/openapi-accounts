@@ -2,15 +2,14 @@ package com.devexperts.accounts.services.impl;
 
 import com.devexperts.accounts.entities.Account;
 import com.devexperts.accounts.entities.patch.AccountPatch;
+import com.devexperts.accounts.exceptions.AccountNotFoundException;
 import com.devexperts.accounts.repositories.AccountRepository;
 import com.devexperts.accounts.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void updateAccount(long id, AccountPatch accountPatch) {
         Account account = accountRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+            .orElseThrow(() -> new AccountNotFoundException(id));
         account = accountPatch.apply(account);
         accountRepository.save(account);
     }
@@ -55,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void deleteAccount(long id) {
         Account account = accountRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
+            .orElseThrow(() -> new AccountNotFoundException(id));
         accountRepository.delete(account);
     }
 }

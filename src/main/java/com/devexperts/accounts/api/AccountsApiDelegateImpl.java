@@ -1,6 +1,7 @@
 package com.devexperts.accounts.api;
 
 import com.devexperts.accounts.entities.Account;
+import com.devexperts.accounts.exceptions.AccountNotFoundException;
 import com.devexperts.accounts.mappers.AccountMapper;
 import com.devexperts.accounts.model.AccountJson;
 import com.devexperts.accounts.model.CreateAccountJson;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -46,11 +46,9 @@ public class AccountsApiDelegateImpl implements AccountsApiDelegate {
 
     @Override
     public ResponseEntity<AccountJson> findAccountById(Long accountId) {
-        Optional<Account> account = accountService.findAccountById(accountId);
-        if (account.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(accountMapper.toDto(account.get()), HttpStatus.OK);
+        Account account = accountService.findAccountById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException(accountId));
+        return new ResponseEntity<>(accountMapper.toDto(account), HttpStatus.OK);
     }
 
     @Override
