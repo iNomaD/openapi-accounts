@@ -73,13 +73,7 @@ paths:
       summary: Updates an account
       operationId: updateAccount
       parameters:
-        - name: accountId
-          in: path
-          description: Account ID
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/accountId'
       requestBody:
         description: Fields to be updated
         content:
@@ -101,13 +95,7 @@ paths:
       summary: Deletes an account
       operationId: deleteAccount
       parameters:
-        - name: accountId
-          in: path
-          description: Account ID
-          required: true
-          schema:
-            type: integer
-            format: int64
+        - $ref: '#/components/parameters/accountId'
       responses:
         204:
           description: Deleted
