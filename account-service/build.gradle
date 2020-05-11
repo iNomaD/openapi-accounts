@@ -1,0 +1,65 @@
+apply plugin: "org.springframework.boot"
+apply plugin: "org.openapi.generator"
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "io.springfox:springfox-swagger2"
+    implementation "io.springfox:springfox-swagger-ui"
+    implementation "org.openapitools:jackson-databind-nullable"
+
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+    runtimeOnly "com.h2database:h2"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    inputSpec = "${projectDir}/src/main/resources/api/accounts-spec.yaml"
+    outputDir = "${buildDir}/generated/open-api"
+    apiPackage = "com.devexperts.accounts.api"
+    invokerPackage = "com.devexperts.accounts.handler"
+    modelPackage = "com.devexperts.accounts.model"
+    modelNameSuffix = "Json"
+    configOptions = [
+            delegatePattern: "true"
+    ]
+}
+
+idea.project.settings {
+    taskTriggers {
+        beforeBuild tasks.getByName("openApiGenerate")
+        beforeRebuild tasks.getByName("openApiGenerate")
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${buildDir.absolutePath}/generated/open-api/src/main/java"
+        }
+    }
+}
+
+compileJava {
+    dependsOn  tasks.openApiGenerate
+    source "${buildDir}/generated/open-api/src/main/java"
+}
+
+springBoot {
+    mainClassName = "com.devexperts.accounts.AccountsApp"
+}
