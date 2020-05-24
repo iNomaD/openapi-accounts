@@ -1,2 +1,3 @@
 rootProject.name = 'accounts'
 include 'account-service'
+include 'account-service-api'

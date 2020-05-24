@@ -27,6 +27,7 @@ allprojects {
         h2dbVersion = "1.4.200"
         lombokVersion = "1.18.12"
         springfoxSwaggerVersion = "2.9.2"
+        hibernateValidatorVersion = "6.0.17.Final"
         jacksonDatabindNullableVersion = "0.2.1"
     }
 
@@ -50,6 +51,7 @@ allprojects {
             dependency "io.springfox:springfox-swagger2:${springfoxSwaggerVersion}"
             dependency "io.springfox:springfox-swagger-ui:${springfoxSwaggerVersion}"
             dependency "org.openapitools:jackson-databind-nullable:${jacksonDatabindNullableVersion}"
+            dependency "org.hibernate:hibernate-validator:${hibernateValidatorVersion}"
         }
     }
 }
