@@ -1,7 +1,7 @@
 package com.devexperts.accounts.api;
 
 import com.devexperts.accounts.exceptions.AccountNotFoundException;
-import com.devexperts.accounts.model.ErrorJson;
+import com.devexperts.common.model.ErrorJson;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

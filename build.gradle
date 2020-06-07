@@ -29,6 +29,7 @@ allprojects {
         springfoxSwaggerVersion = "2.9.2"
         hibernateValidatorVersion = "6.0.17.Final"
         jacksonDatabindNullableVersion = "0.2.1"
+        specificationDir = "${rootDir}/common-api/src/main/resources/api"
     }
 
     dependencyManagement {

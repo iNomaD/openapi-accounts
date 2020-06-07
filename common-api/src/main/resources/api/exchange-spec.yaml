@@ -1,0 +1,54 @@
+openapi: 3.0.2
+info:
+  title: Exchange Service
+  description: Services to support currency exchange
+  version: 0.0.1
+paths:
+  /exchange:
+    get:
+      tags:
+        - exchange
+      summary: Exchange currency
+      operationId: exchangeCurrency
+      requestBody:
+        description: Exchange request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRequest'
+        required: true
+      responses:
+        200:
+          description: Successfully exchanged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExchangeResponse'
+        default:
+          $ref: '#/components/responses/Error'
+components:
+  schemas:
+    ExchangeRequest:
+      required:
+        - currencyFrom
+        - currencyTo
+        - amount
+      type: object
+      properties:
+        currencyFrom:
+          $ref: "common-spec.yaml#/components/schemas/Currency"
+        currencyTo:
+          $ref: "common-spec.yaml#/components/schemas/Currency"
+        amount:
+          type: number
+          description: Amount to exchange
+          example: 150.00
+    ExchangeResponse:
+      required:
+        - amount
+      type: object
+      properties:
+        amount:
+          type: number
+          description: Received amount
+          example: 150.00

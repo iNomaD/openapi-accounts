@@ -10,13 +10,12 @@ dependencies {
 openApiGenerate {
     generatorName = "spring"
     library = "spring-cloud"
-    inputSpec = "${projectDir}/src/main/resources/api/accounts-spec.yaml"
+    inputSpec = "${projectDir}/src/main/resources/api/common-spec.yaml"
     outputDir = "${buildDir}/generated/open-api"
-    apiPackage = "com.devexperts.accounts.api"
-    modelPackage = "com.devexperts.accounts.model"
+    apiPackage = "com.devexperts.common.api"
+    modelPackage = "com.devexperts.common.model"
     modelNameSuffix = "Json"
     systemProperties = [
-            apis: "",
             models: "",
             supportingFiles: "ApiKeyRequestInterceptor.java,ClientConfiguration.java"
     ]

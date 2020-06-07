@@ -12,7 +12,7 @@ configurations {
 }
 
 dependencies {
-    implementation project(":account-service-api")
+    implementation project(":common-api:account-service-api")
 
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
@@ -31,7 +31,7 @@ dependencies {
 
 openApiGenerate {
     generatorName = "spring"
-    inputSpec = "${rootDir}/account-service-api/src/main/resources/api/accounts-spec.yaml"
+    inputSpec = "${specificationDir}/accounts-spec.yaml"
     outputDir = "${buildDir}/generated/open-api"
     apiPackage = "com.devexperts.accounts.api"
     invokerPackage = "com.devexperts.accounts.handler"
@@ -43,6 +43,9 @@ openApiGenerate {
     systemProperties = [
             apis: "",
             supportingFiles: "ApiUtil.java,HomeController.java,OpenAPIDocumentationConfig.java"
+    ]
+    importMappings = [
+            "Error": "com.devexperts.common.model.ErrorJson"
     ]
 }
 
